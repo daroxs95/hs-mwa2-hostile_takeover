@@ -45,15 +45,8 @@ The last comment block of each slide will be treated as slide notes. It will be 
 
 # Routes
 
-Data:
+<img border="rounded" src="/routes.png" alt="">
 
-- GET
-- POST
-- PUT
-- DELETE
-
-<br>
-<br>
 
 ---
 
@@ -62,22 +55,133 @@ Data:
 <div grid="~ cols-2 gap-4">
 <div>
 
-## Model 1
-- has 
-- has 
-- has 
-- has 
-- has 
-- has
-- has 
+## Users
+- id
+- name
 
 </div>
 <div>
 
-## Model 2
-- has
-- item cascade deletion
-- has
+## News
+- id
+- title
+- text
+- countryId
+
+</div>
+</div>
+
+<br />
+
+<div grid="~ cols-2 gap-4">
+<div>
+
+## Seminars
+- id
+- title
+- text
+
+</div>
+<div>
+
+## Speakers
+- seminarId
+- userId
+
+</div>
+</div>
+
+---
+
+# Models
+
+<div grid="~ cols-2 gap-4">
+<div>
+
+## Countries
+- id
+- name
+
+</div>
+<div>
+
+## Events
+- id
+- name
+- countryId
+- date
+
+</div>
+</div>
+
+<div grid="~ cols-2 gap-4">
+<div>
+
+## Academies
+- id
+- title
+- text
+
+</div>
+</div>
+
+
+---
+
+# Models
+<img border="rounded" src="/models.png" alt="">
+
+
+---
+class: px-20
+---
+
+# Layout
+
+### Base layout
+```tsx
+<app-layout showHeadline:boolean>
+    <navbar />
+    <hero showHeadline={showHeadline} />
+    <slot /> // --> Here goes each page/route specifics 
+    <partnerships-section />
+    <footer />
+</app-layout>
+```
+
+### Route `/`
+<div grid="~ cols-2 gap-4">
+<div>
+
+```tsx
+<more-information />
+<academy-section>
+    <online-module-li />
+    ...
+</academy-section>
+<recent-news-section>
+    <news-card />
+    ...
+</recent-news-section>
+```
+
+</div>
+<div>
+
+```
+recentNews: Array<{
+    slug: string
+    country: string
+    title: string
+    description: string
+    publishedAt: Date
+}>
+onlineModules: Array<{
+    slug: string
+    title: string
+    subtitle: string
+}>
+```
 
 </div>
 </div>
@@ -88,12 +192,312 @@ class: px-20
 
 # Layout
 
-Components:
+### Route `/news`
+<div grid="~ cols-2 gap-4">
+<div>
 
-- Navbar
-- Body
-- Footer
+```tsx
+<news-section>
+  <pagination-section />
+  <news-card />
+  <news-card />
+  ...
+</news-section>
+```
 
+</div>
+<div>
+
+```
+news: Array<{
+    slug: string
+    country: string
+    title: string
+    description: string
+    publishedAt: string
+}>
+```
+
+</div>
+</div>
+
+### Route `/academy`
+<div grid="~ cols-2 gap-4">
+<div>
+
+```tsx
+<main-content>
+  <online-module-card />
+  ...
+</main-content>
+<instructors-aside>
+  <instructor-card />
+  ...
+</instructors-aside>
+```
+
+</div>
+<div>
+
+```
+instructors: Array<{
+    name: string
+    description: string
+    contactLink: string
+    image: string
+}>
+onlineModules: Array<{
+    slug: string
+    title: string
+    subtitle: string
+    headline: string
+}>
+```
+
+</div>
+</div>
+
+---
+class: px-20
+---
+
+# Layout
+
+
+### Route `/academy/seminar/:slug`
+<div grid="~ cols-2 gap-4">
+<div>
+
+```tsx
+<main-content>
+  <seminar-card />
+  <speakers-list>
+    <speaker-card />
+    <speaker-card />
+    ...
+  </speakers-list>
+</main-content>
+<aside />
+```
+
+</div>
+<div>
+
+```
+module: {
+    title: string
+    subtitle: string
+    headline: string
+    description: string
+    publishedAt: string
+}
+instructors: Array<{
+    name: string
+    description: string
+    contactLink: string
+    image: string
+}>
+```
+
+</div>
+</div>
+
+---
+class: px-20
+---
+
+# Layout
+
+### Route `/events`
+<div grid="~ cols-2 gap-4">
+<div>
+
+```tsx
+<upcoming-events>
+  <event-card />
+  <event-card />
+  ...
+</upcoming-events>
+<past-events>
+  <event-card />
+  <event-card />
+  ...
+</past-events>
+```
+
+</div>
+<div>
+
+```
+upcomingEvents: Array<{
+    date: Date
+    country: string
+    title: string
+}>
+pastEvents: Array<{
+    date: Date
+    country: string
+    title: string
+}>
+```
+
+</div>
+</div>
+
+### Route `/contact-us`
+<div grid="~ cols-2 gap-4">
+<div>
+
+```tsx
+<main-content>
+    ...
+</main-content>
+<countries-aside />
+
+```
+
+</div>
+<div>
+
+```
+countries: Array<{
+    name: string
+    slug: string
+}>
+```
+
+</div>
+</div>
+
+---
+class: px-20
+---
+
+# Layout
+
+### Route `/member-countries`
+<div grid="~ cols-2 gap-4">
+<div>
+
+```tsx
+<main-content>
+    ...
+</main-content>
+<countries-aside />
+```
+
+</div>
+<div>
+
+```
+countries: Array<{
+    name: string
+    slug: string
+}>
+```
+
+</div>
+</div>
+
+---
+class: px-20
+---
+
+# Layout
+
+### Route `/countries/:slug`
+<div grid="~ cols-2 gap-4">
+<div>
+
+```tsx
+<main-content>
+    <country-card />
+    <upcoming-events>
+        <event-card />
+        <event-card />
+        ...
+    </upcoming-events>
+    <upcoming-news>
+        <news-card />
+        <news-card />
+        ...
+    </upcoming-news>
+</main-content>
+<countries-info-aside />
+```
+
+</div>
+<div>
+
+```
+country: {
+    name: string
+    headline: string
+    flagImage: string
+    description: string
+}
+upcomingEventsInCountry: Array<{
+    date: Date
+    title: string
+}>
+upcomingNewsInCountry: Array<{
+    title: string
+    slug: string
+    description: string
+    publishedAt: Date
+}>
+```
+
+</div>
+</div>
+
+---
+class: px-20
+---
+
+# Layout
+
+<div grid="~ cols-2 gap-4">
+<div>
+
+### Route `/about`
+
+```tsx
+<index-aside />
+<main-content>
+    ...
+</main-content>
+```
+
+</div>
+<div>
+
+### Route `/structure`
+
+```tsx
+<index-aside />
+<main-content>
+    ...
+</main-content>
+```
+
+</div>
+</div>
+
+<div grid="~ cols-2 gap-4">
+<div>
+
+### Route `/history`
+
+```tsx
+<index-aside />
+<main-content>
+    ...
+</main-content>
+```
+
+</div>
+</div>
 
 ---
 layout: center
